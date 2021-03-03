@@ -1,27 +1,25 @@
+import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
+import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/verify_email.dart';
 
-showAlertDialog(BuildContext context, title, content) {
-  // set up the button
-  Widget okButton = FlatButton(
-    child: Text("Ok"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
-
-  // set up the AlertDialog
+showLoadingDialog(context) {
   AlertDialog alert = AlertDialog(
-    title: Text(title),
-    content: Text(content),
-    actions: [
-      okButton,
-    ],
+    contentPadding: EdgeInsets.fromLTRB(0, 30, 0, 30),
+    content: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+        ),
+        Text("Please Wait...")
+      ],
+    ),
   );
 
-  // show the dialog
   showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (BuildContext context) {
       return alert;
     },
@@ -30,15 +28,15 @@ showAlertDialog(BuildContext context, title, content) {
 
 verifyEmailDialog(BuildContext context, title, content) {
   // set up the button
-  Widget okButton = FlatButton(
+  Widget okButton = CupertinoDialogAction(
     child: Text("Verify"),
     onPressed: () {
-      Navigator.pushReplacementNamed(context, VerifyEmail.routeName);
+      Navigator.pushNamed(context, VerifyEmail.routeName);
     },
   );
 
   // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
+  CupertinoAlertDialog alert = CupertinoAlertDialog(
     title: Text(title),
     content: Text(content),
     actions: [

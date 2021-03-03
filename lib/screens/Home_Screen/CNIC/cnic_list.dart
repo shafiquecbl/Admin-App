@@ -1,36 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/screens/Home_Screen/Users/CNIC/verify_cnic.dart';
-import 'package:shop_app/screens/Home_Screen/Users/view_userProfile.dart';
 import 'package:shop_app/size_config.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/widgets/custom_AppBar.dart';
 
-class ManageUsers extends StatefulWidget {
+class CNICList extends StatefulWidget {
   @override
-  _ManageUsersState createState() => _ManageUsersState();
+  _CNICListState createState() => _CNICListState();
 }
 
-class _ManageUsersState extends State<ManageUsers> {
+class _CNICListState extends State<CNICList> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: customAppBar("Manage Users"),
+      appBar: customAppBar("Manage CNIC"),
       body: StreamBuilder(
-        initialData: [],
         stream: FirebaseFirestore.instance
             .collection('Users')
-            .orderBy('Email', descending: true)
+            .where('CNIC Status', isEqualTo: 'Submitted')
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
-            return SpinKitCircle(color: kPrimaryColor);
+          if (snapshot.data == null)
+            return SpinKitCircle(
+              color: kPrimaryColor,
+            );
+          if (snapshot.data.docs.length == 0)
+            return Center(
+              child: Text(
+                "No User available",
+                style: GoogleFonts.teko(
+                  color: kPrimaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            );
           return ListView.builder(
             itemCount: snapshot.data.docs.length,
             itemBuilder: (BuildContext context, int index) {
-              return users(snapshot.data.docs[index]);
+              return listTile(snapshot.data.docs[index]);
             },
           );
         },
@@ -38,7 +50,7 @@ class _ManageUsersState extends State<ManageUsers> {
     );
   }
 
-  users(DocumentSnapshot snapshot) {
+  listTile(DocumentSnapshot snapshot) {
     return Card(
       child: ListTile(
         leading: CircleAvatar(
@@ -77,7 +89,7 @@ class _ManageUsersState extends State<ManageUsers> {
   }
 
   moreDialog(DocumentSnapshot snapshot) {
-    Widget cnic = FlatButton(
+    Widget view = FlatButton(
       onPressed: () {
         Navigator.pop(context);
         Navigator.push(
@@ -92,13 +104,15 @@ class _ManageUsersState extends State<ManageUsers> {
             Icons.verified_user,
             color: kPrimaryColor,
           ),
-          title: Text("CNIC")),
+          title: Text("View CNIC")),
     );
     Widget viewProfile = FlatButton(
       onPressed: () {
         Navigator.pop(context);
-        Navigator.push(context,
-            MaterialPageRoute(builder: (_) => UserProfile(snapshot['Email'])));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => ManageCNIC(email: snapshot['Email'])));
       },
       child: ListTile(
           leading: Icon(
@@ -109,7 +123,7 @@ class _ManageUsersState extends State<ManageUsers> {
     );
     SimpleDialog alert = SimpleDialog(
       children: [
-        // cnic,
+        view,
         viewProfile,
       ],
     );
