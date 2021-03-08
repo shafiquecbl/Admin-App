@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_app/size_config.dart';
 
 const kPrimaryColor = Color(0xFFFF7643);
+const kdashboardColor = Color(0xff392850);
 const kPrimaryLightColor = Color(0xFFFFECDF);
 const kGreenColor = Color(0xFF388E3C);
 const greenColor = Colors.green;

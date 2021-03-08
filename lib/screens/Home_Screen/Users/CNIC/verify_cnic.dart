@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/size_config.dart';
@@ -18,7 +20,35 @@ class _ManageCNICState extends State<ManageCNIC> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: customAppBar("Manage CNIC"),
+      appBar: AppBar(
+        elevation: 2,
+        shadowColor: kPrimaryColor,
+        centerTitle: false,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 0),
+          child: Text(
+            'Managa CNIC',
+            style: GoogleFonts.teko(
+              color: kPrimaryColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        backgroundColor: hexColor,
+        actions: [
+          IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                reject(context);
+              }),
+          IconButton(
+              icon: Icon(Icons.check),
+              onPressed: () {
+                accept(context);
+              })
+        ],
+      ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('CNIC')
@@ -27,7 +57,6 @@ class _ManageCNICState extends State<ManageCNIC> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return SpinKitCircle(color: kPrimaryColor);
-          if (snapshot.data == null) return CircularProgressIndicator();
           List galleryItems = [
             snapshot.data['CNIC BS'],
             snapshot.data['CNIC FS'],
@@ -49,6 +78,80 @@ class _ManageCNICState extends State<ManageCNIC> {
           ));
         },
       ),
+    );
+  }
+
+  accept(BuildContext context) {
+    // set up the button
+    Widget yes = CupertinoDialogAction(
+      child: Text("Yes"),
+      onPressed: () {
+        FirebaseFirestore.instance
+            .collection('Users')
+            .doc(widget.email)
+            .update({'CNIC Status': 'verified'}).then((value) => {
+                  Navigator.pop(context),
+                  Navigator.pop(context),
+                });
+      },
+    );
+    Widget no = CupertinoDialogAction(
+      child: Text("No"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
+      title: Text('Confirmation'),
+      content: Text('Do you want to approve CNIC?'),
+      actions: [yes, no],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  reject(BuildContext context) {
+    // set up the button
+    Widget yes = CupertinoDialogAction(
+      child: Text("Yes"),
+      onPressed: () {
+        FirebaseFirestore.instance
+            .collection('Users')
+            .doc(widget.email)
+            .update({'CNIC Status': 'Not Verified'}).then((value) => {
+                  Navigator.pop(context),
+                  Navigator.pop(context),
+                });
+      },
+    );
+    Widget no = CupertinoDialogAction(
+      child: Text("No"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
+      title: Text('Confirmation'),
+      content: Text('Do you want to disapprove CNIC?'),
+      actions: [yes, no],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

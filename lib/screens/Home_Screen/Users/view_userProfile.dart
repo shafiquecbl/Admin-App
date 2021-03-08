@@ -6,6 +6,7 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/RatingBar.dart';
+import 'package:shop_app/widgets/custom_AppBar.dart';
 
 class UserProfile extends StatefulWidget {
   final String userEamil;
@@ -15,32 +16,18 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  User user = FirebaseAuth.instance.currentUser;
-  String email = FirebaseAuth.instance.currentUser.email;
-  final auth = FirebaseAuth.instance;
   GetData getData = new GetData();
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-          elevation: 5,
-          shadowColor: kPrimaryColor,
-          title: Text(
-            "My Profile",
-            style: TextStyle(
-              color: kPrimaryColor,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          backgroundColor: hexColor,
-          ),
+      appBar: customAppBar(widget.userEamil),
       body: FutureBuilder(
         future: getData.getUserProfile(widget.userEamil),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-            return SpinKitDoubleBounce(
+            return SpinKitCircle(
               color: kPrimaryColor,
             );
 
@@ -61,7 +48,7 @@ class _UserProfileState extends State<UserProfile> {
                           CircleAvatar(
                             radius: snapshot.data['PhotoURL'] == null ? 54 : 68,
                             backgroundColor: kPrimaryColor.withOpacity(0.8),
-                            child: user.photoURL != null
+                            child: snapshot.data['PhotoURL'] != null
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(70),
                                     child: Image.network(
@@ -261,32 +248,29 @@ class _UserProfileState extends State<UserProfile> {
                             left: 20, right: 20, top: 10, bottom: 20),
                         child: Column(children: [
                           ListTile(
-                            leading: Icon(Icons.email_outlined,
-                                color: kPrimaryColor),
-                            title: Text("Email"),
-                            subtitle: Text(snapshot.data['Email']),
-                            trailing: Text(snapshot.data['Email status'])
-                          ),
+                              leading: Icon(Icons.email_outlined,
+                                  color: kPrimaryColor),
+                              title: Text("Email"),
+                              subtitle: Text(snapshot.data['Email']),
+                              trailing: Text(snapshot.data['Email status'])),
                           ListTile(
-                            leading: Icon(Icons.phone, color: kPrimaryColor),
-                            title: Text("Phone"),
-                            subtitle: Text(snapshot.data['Phone Number']),
-                            trailing: Text(snapshot.data['Phone Number status'])
-                          ),
+                              leading: Icon(Icons.phone, color: kPrimaryColor),
+                              title: Text("Phone"),
+                              subtitle: Text(snapshot.data['Phone Number']),
+                              trailing:
+                                  Text(snapshot.data['Phone Number status'])),
                           ListTile(
-                            leading: Icon(Icons.verified_user,
-                                color: kPrimaryColor),
-                            title: Text("CNIC"),
-                            subtitle: Text(snapshot.data['CNIC']),
-                            trailing: Text(snapshot.data['CNIC Status'])
-                          ),
+                              leading: Icon(Icons.verified_user,
+                                  color: kPrimaryColor),
+                              title: Text("CNIC"),
+                              subtitle: Text(snapshot.data['CNIC']),
+                              trailing: Text(snapshot.data['CNIC Status'])),
                           ListTile(
-                            leading: Icon(Icons.attach_money,
-                                color: kPrimaryColor),
-                            title: Text("Payment Method"),
-                            subtitle: Text(snapshot.data['Payment Method']),
-                            trailing: Text(snapshot.data['Payment Status'])
-                          ),
+                              leading: Icon(Icons.attach_money,
+                                  color: kPrimaryColor),
+                              title: Text("Payment Method"),
+                              subtitle: Text(snapshot.data['Payment Method']),
+                              trailing: Text(snapshot.data['Payment Status'])),
                         ])),
                     Container(
                       alignment: Alignment.centerLeft,

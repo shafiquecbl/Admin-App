@@ -78,11 +78,16 @@ class _CNICListState extends State<CNICList> {
                   )),
         title: Text(snapshot['Name']),
         subtitle: Text(snapshot['Email']),
-        trailing: IconButton(
-          icon: Icon(Icons.more_vert),
+        trailing: RaisedButton(
           onPressed: () {
-            moreDialog(snapshot);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => ManageCNIC(
+                          email: snapshot['Email'],
+                        )));
           },
+          child: Text("View"),
         ),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/screens/Home_Screen/CNIC/cnic_list.dart';
 import 'package:shop_app/screens/Home_Screen/Users/users.dart';
@@ -8,15 +10,23 @@ class GridDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Flexible(
-        child: GridView(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      child: StaggeredGridView.count(
         crossAxisCount: 2,
         crossAxisSpacing: 30,
         mainAxisSpacing: 30,
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+        staggeredTiles: [
+          StaggeredTile.extent(2, 120),
+          StaggeredTile.extent(1, 120),
+          StaggeredTile.extent(1, 120),
+        ],
+        children: [
+          users(context),
+          cnic(context),
+          cnic(context),
+        ],
       ),
-      padding: EdgeInsets.only(left: 30, right: 30),
-      children: [users(context), cnic(context)],
-    ));
+    );
   }
 
   users(BuildContext context) {
@@ -31,8 +41,14 @@ class GridDashboard extends StatelessWidget {
       },
       splashColor: kPrimaryColor,
       child: Container(
-        decoration: BoxDecoration(
-            color: Color(0xff453658), borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: kPrimaryColor.withOpacity(0.3),
+            spreadRadius: 0,
+            blurRadius: 2,
+            offset: Offset(1, 0),
+          )
+        ], color: Colors.grey[50], borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -46,10 +62,8 @@ class GridDashboard extends StatelessWidget {
             ),
             Text(
               "Users",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600),
+              style:
+                  GoogleFonts.teko(fontWeight: FontWeight.w600, fontSize: 18),
             ),
           ],
         ),
@@ -69,13 +83,19 @@ class GridDashboard extends StatelessWidget {
       },
       splashColor: kPrimaryColor,
       child: Container(
-        decoration: BoxDecoration(
-            color: Color(0xff453658), borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: kPrimaryColor.withOpacity(0.3),
+            spreadRadius: 0,
+            blurRadius: 2,
+            offset: Offset(1, 0),
+          )
+        ], color: Colors.grey[50], borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SvgPicture.asset(
-              "assets/icons/User.svg",
+              "assets/icons/id-card.svg",
               color: kPrimaryColor,
               width: 42,
             ),
@@ -84,10 +104,8 @@ class GridDashboard extends StatelessWidget {
             ),
             Text(
               "Manage CNIC",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600),
+              style:
+                  GoogleFonts.teko(fontWeight: FontWeight.w600, fontSize: 18),
             ),
           ],
         ),

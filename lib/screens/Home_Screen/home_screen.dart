@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/screens/Home_Screen/griddashboard.dart';
-import 'package:shop_app/constants.dart';
+import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
+import 'package:shop_app/widgets/snack_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   static String routeName = "/home_screen";
@@ -12,14 +16,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff392850),
       body: Column(
         children: <Widget>[
           SizedBox(
-            height: 110,
+            height: 80,
           ),
           Padding(
-            padding: EdgeInsets.only(left: 16, right: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -28,27 +31,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: <Widget>[
                     Text(
                       "Muhammad Shafique",
-                      style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
+                      style: GoogleFonts.teko(
+                          fontWeight: FontWeight.bold, fontSize: 22),
                     ),
                     SizedBox(
                       height: 4,
                     ),
                     Text(
                       "Admin",
-                      style: TextStyle(
-                              color: Color(0xffa29aac),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
+                      style: GoogleFonts.teko(
+                          color: Color(0xffa29aac),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
                 IconButton(
                   alignment: Alignment.topCenter,
-                  icon: Icon(Icons.settings,color: kWhiteColor,),
-                  onPressed: () {},
+                  icon: Icon(
+                    Icons.logout,
+                  ),
+                  onPressed: () {
+                    confirmSignout(context);
+                  },
                 )
               ],
             ),
@@ -56,9 +61,47 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 40,
           ),
-         GridDashboard()
+          GridDashboard()
         ],
       ),
     );
   }
+}
+
+confirmSignout(BuildContext context) {
+  // set up the button
+  Widget yes = CupertinoDialogAction(
+    child: Text("Yes"),
+    onPressed: () {
+      FirebaseAuth.instance.signOut().whenComplete(() {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => SignInScreen()),
+        );
+      }).catchError((e) {
+        Snack_Bar.show(context, e.message);
+      });
+    },
+  );
+
+  Widget no = CupertinoDialogAction(
+    child: Text("No"),
+    onPressed: () {
+      Navigator.maybePop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  CupertinoAlertDialog alert = CupertinoAlertDialog(
+    title: Text("Signout"),
+    content: Text("Do you want to signout?"),
+    actions: [yes, no],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
