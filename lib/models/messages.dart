@@ -10,18 +10,15 @@ class Messages {
   static DateTime now = DateTime.now();
   String dateTime = DateFormat("dd-MM-yyyy h:mma").format(now);
 
-  Future addMessage(receiverEmail, senderName, senderPhotoURL, message) async {
+  Future addMessage(receiverEmail, message) async {
     await FirebaseFirestore.instance
         .collection('Messages')
         .doc(email)
         .collection(receiverEmail)
         .add({
-      'Name': senderName,
       'Email': email,
-      'PhotoURL': senderPhotoURL,
       'Time': dateTime,
       'Message': message,
-      'Type': "text",
       'timestamp': FieldValue.serverTimestamp(),
     });
 
@@ -30,42 +27,38 @@ class Messages {
         .doc(receiverEmail)
         .collection(email)
         .add({
-      'Name': senderName,
       'Email': email,
-      'PhotoURL': senderPhotoURL,
       'Time': dateTime,
       'Message': message,
-      'Type': "text",
       'timestamp': FieldValue.serverTimestamp(),
     });
-    
   }
 
-  Future addContact(receiverEmail, receiverName,receiverPhotoURl,message) async {
-     await FirebaseFirestore.instance
-        .collection('Users')
+  Future addContact(
+      receiverEmail, receiverName, receiverPhotoURl, message) async {
+    await FirebaseFirestore.instance
+        .collection('Admin')
         .doc(email)
-        .collection('Contacts').doc(receiverEmail)
+        .collection('Contact US')
+        .doc(receiverEmail)
         .set({
       'Name': receiverName,
       'Email': receiverEmail,
       'PhotoURL': receiverPhotoURl,
       'Last Message': message,
       'Time': dateTime,
+      'Status': "read"
     });
 
     return await FirebaseFirestore.instance
         .collection('Users')
         .doc(receiverEmail)
-        .collection('Contacts').doc(email)
+        .collection('Contact US')
+        .doc(email)
         .set({
-      'Name': user.displayName,
       'Email': email,
-      'PhotoURL': user.photoURL,
-      'Last Message': message,
+      'Status': 'unread',
       'Time': dateTime,
     });
-    
   }
-
 }

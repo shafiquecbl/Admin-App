@@ -15,4 +15,13 @@ class UpdateData {
       "state": stateNum,
     });
   }
+
+  Future updateMessageStatus(receiverEmail) async {
+    return await FirebaseFirestore.instance
+        .collection('Admin')
+        .doc(email)
+        .collection('Contact US')
+        .doc(receiverEmail)
+        .update({'Status': "read"});
+  }
 }

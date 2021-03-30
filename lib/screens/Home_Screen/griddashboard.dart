@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/screens/Home_Screen/CNIC/cnic_list.dart';
+import 'package:shop_app/screens/Home_Screen/Inbox/inbox.dart';
 import 'package:shop_app/screens/Home_Screen/Users/users.dart';
+import 'package:shop_app/widgets/navigator.dart';
 
 class GridDashboard extends StatelessWidget {
   @override
@@ -32,12 +34,7 @@ class GridDashboard extends StatelessWidget {
   users(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ManageUsers(),
-          ),
-        );
+        navigator(context, ManageUsers());
       },
       splashColor: kPrimaryColor,
       child: Container(
@@ -74,12 +71,7 @@ class GridDashboard extends StatelessWidget {
   cnic(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => CNICList(),
-          ),
-        );
+        navigator(context, CNICList());
       },
       splashColor: kPrimaryColor,
       child: Container(
@@ -115,7 +107,9 @@ class GridDashboard extends StatelessWidget {
 
   inbox(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        navigator(context, Inbox());
+      },
       splashColor: kPrimaryColor,
       child: Container(
         decoration: BoxDecoration(boxShadow: [
@@ -138,7 +132,7 @@ class GridDashboard extends StatelessWidget {
               height: 14,
             ),
             Text(
-              "Manage CNIC",
+              "Inbox",
               style:
                   GoogleFonts.teko(fontWeight: FontWeight.w600, fontSize: 18),
             ),
