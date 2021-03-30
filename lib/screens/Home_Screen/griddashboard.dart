@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -131,11 +133,50 @@ class GridDashboard extends StatelessWidget {
             SizedBox(
               height: 14,
             ),
-            Text(
-              "Inbox",
-              style:
-                  GoogleFonts.teko(fontWeight: FontWeight.w600, fontSize: 18),
-            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Inbox",
+                  style: GoogleFonts.teko(
+                      fontWeight: FontWeight.w600, fontSize: 18),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Admin')
+                      .doc(FirebaseAuth.instance.currentUser.email)
+                      .collection('Contact US')
+                      .where('Status', isEqualTo: 'unread')
+                      .snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting)
+                      return Container();
+                    return Container(
+                      padding: EdgeInsets.all(2),
+                      decoration: new BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      constraints: BoxConstraints(
+                        minWidth: 25,
+                        minHeight: 12,
+                      ),
+                      child: new Text(
+                        '${snapshot.data.docs.length}',
+                        style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            )
           ],
         ),
       ),
