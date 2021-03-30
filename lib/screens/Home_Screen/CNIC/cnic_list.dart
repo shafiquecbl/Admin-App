@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/constants.dart';
-import 'package:shop_app/screens/Home_Screen/Users/CNIC/verify_cnic.dart';
+import 'package:shop_app/screens/Home_Screen/CNIC/verify_cnic.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/custom_AppBar.dart';
 
@@ -56,12 +56,11 @@ class _CNICListState extends State<CNICList> {
         leading: CircleAvatar(
             radius: 27,
             backgroundColor: kPrimaryColor.withOpacity(0.8),
-            child: snapshot['PhotoURL'] != null
+            child: snapshot['PhotoURL'] == null || snapshot['PhotoURL'] == ""
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(50),
-                    child: FadeInImage.assetNetwork(
-                      placeholder: 'assets/images/load.gif',
-                      image: snapshot['PhotoURL'],
+                    child: Image.asset(
+                      'assets/images/nullUser.png',
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,
@@ -69,8 +68,9 @@ class _CNICListState extends State<CNICList> {
                   )
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(50),
-                    child: Image.asset(
-                      'assets/images/nullUser.png',
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/images/load.gif',
+                      image: snapshot['PhotoURL'],
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,

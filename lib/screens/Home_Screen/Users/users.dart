@@ -42,13 +42,12 @@ class _ManageUsersState extends State<ManageUsers> {
       child: ListTile(
         leading: CircleAvatar(
             radius: 27,
-            backgroundColor: kPrimaryColor.withOpacity(0.8),
-            child: snapshot['PhotoURL'] != null
+            backgroundColor: hexColor,
+            child: snapshot['PhotoURL'] == null || snapshot['PhotoURL'] == ""
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(50),
-                    child: FadeInImage.assetNetwork(
-                      placeholder: 'assets/images/load.gif',
-                      image: snapshot['PhotoURL'],
+                    child: Image.asset(
+                      'assets/images/nullUser.png',
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,
@@ -56,8 +55,9 @@ class _ManageUsersState extends State<ManageUsers> {
                   )
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(50),
-                    child: Image.asset(
-                      'assets/images/nullUser.png',
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/images/load.gif',
+                      image: snapshot['PhotoURL'],
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,

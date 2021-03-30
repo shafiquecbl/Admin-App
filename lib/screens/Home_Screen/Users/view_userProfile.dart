@@ -45,31 +45,28 @@ class _UserProfileState extends State<UserProfile> {
                       child: Stack(
                         children: [
                           CircleAvatar(
-                            radius: snapshot.data['PhotoURL'] == null ? 54 : 68,
-                            backgroundColor: kPrimaryColor.withOpacity(0.8),
-                            child: snapshot.data['PhotoURL'] != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(70),
-                                    child: Image.network(
-                                      snapshot.data['PhotoURL'],
-                                      width: 130,
-                                      height: 130,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
-                                    width: 100,
-                                    height: 100,
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.grey[800],
-                                    ),
-                                  ),
-                          ),
+                              radius: 68,
+                              backgroundColor: hexColor,
+                              child: snapshot.data['PhotoURL'] == null ||
+                                      snapshot.data['PhotoURL'] == ""
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(70),
+                                      child: Image.asset(
+                                        'assets/images/nullUser.png',
+                                        width: 130,
+                                        height: 130,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(70),
+                                      child: Image.network(
+                                        snapshot.data['PhotoURL'],
+                                        width: 130,
+                                        height: 130,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )),
                         ],
                       ),
                     ),
@@ -147,7 +144,7 @@ class _UserProfileState extends State<UserProfile> {
                                                     getProportionateScreenHeight(
                                                         10)),
                                             Text(
-                                                '${snapshot.data['Completion Rate']}% Completetion Rate'),
+                                                '${snapshot.data['Completion Rate'].toStringAsFixed(0)}% Completetion Rate'),
                                             Text(
                                                 '${snapshot.data['Completed Task']} Completed Tasks'),
                                           ],
