@@ -23,7 +23,7 @@ class GridDashboard extends StatelessWidget {
         children: [
           users(context),
           cnic(context),
-          cnic(context),
+          inbox(context),
         ],
       ),
     );
@@ -98,6 +98,41 @@ class GridDashboard extends StatelessWidget {
               "assets/icons/id-card.svg",
               color: kPrimaryColor,
               width: 42,
+            ),
+            SizedBox(
+              height: 14,
+            ),
+            Text(
+              "Manage CNIC",
+              style:
+                  GoogleFonts.teko(fontWeight: FontWeight.w600, fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  inbox(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      splashColor: kPrimaryColor,
+      child: Container(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: kPrimaryColor.withOpacity(0.3),
+            spreadRadius: 0,
+            blurRadius: 2,
+            offset: Offset(1, 0),
+          )
+        ], color: Colors.grey[50], borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              Icons.inbox,
+              color: kPrimaryColor,
+              size: 42,
             ),
             SizedBox(
               height: 14,

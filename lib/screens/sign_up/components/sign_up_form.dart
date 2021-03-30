@@ -60,6 +60,7 @@ class _SignUpFormState extends State<SignUpForm> {
             press: () async {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
+                Navigator.pop(context);
                 signUpUser(email, password, context);
               }
             },
@@ -178,21 +179,14 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  Future<void> signUpUser(email, password, context) async {
-    try {
-      await auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then(
-            (currentUser){
-                Navigator.pushReplacementNamed(context, VerifyEmail.routeName);
-            }
-          )
-          .catchError((e) {
-        Snack_Bar.show(context, e.message);
-      });
-    } catch (e) {
+  signUpUser(email, password, context) async {
+    await auth
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((currentUser) {
+      Navigator.pushReplacementNamed(context, VerifyEmail.routeName);
+    }).catchError((e) {
+      Navigator.pop(context);
       Snack_Bar.show(context, e.message);
-    }
-    return "user";
+    });
   }
 }

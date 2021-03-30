@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/setData.dart';
-import 'package:shop_app/screens/complete_profile/complete_profile_screen.dart';
 
 final auth = FirebaseAuth.instance;
 User user = auth.currentUser;
@@ -75,7 +74,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
-      Navigator.pushReplacementNamed(context, CompleteProfileScreen.routeName);
       SetData().saveNewUser(email, context);
     }
   }

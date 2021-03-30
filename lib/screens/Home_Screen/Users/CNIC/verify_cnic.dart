@@ -6,7 +6,6 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:shop_app/widgets/custom_AppBar.dart';
 
 class ManageCNIC extends StatefulWidget {
   final String email;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
-import 'package:shop_app/screens/Home_Screen/Users/CNIC/verify_cnic.dart';
 import 'package:shop_app/screens/Home_Screen/Users/view_userProfile.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -77,23 +76,6 @@ class _ManageUsersState extends State<ManageUsers> {
   }
 
   moreDialog(DocumentSnapshot snapshot) {
-    Widget cnic = FlatButton(
-      onPressed: () {
-        Navigator.pop(context);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => ManageCNIC(
-                      email: snapshot['Email'],
-                    )));
-      },
-      child: ListTile(
-          leading: Icon(
-            Icons.verified_user,
-            color: kPrimaryColor,
-          ),
-          title: Text("CNIC")),
-    );
     Widget viewProfile = FlatButton(
       onPressed: () {
         Navigator.pop(context);

@@ -56,16 +56,6 @@ class _SignFormState extends State<SignForm> {
           SizedBox(height: getProportionateScreenHeight(30)),
           Row(
             children: [
-              Checkbox(
-                value: remember,
-                activeColor: kPrimaryColor,
-                onChanged: (value) {
-                  setState(() {
-                    remember = value;
-                  });
-                },
-              ),
-              Text("Remember me"),
               Spacer(),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(
@@ -85,10 +75,22 @@ class _SignFormState extends State<SignForm> {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
                 user = auth.currentUser;
-                FirebaseFirestore.instance.terminate();
+                showLoadingDialog(context);
                 FirebaseFirestore.instance
-                    .clearPersistence()
-                    .then((value) => signinUser(email, password, context));
+                    .collection('Admin')
+                    .doc(email)
+                    .get()
+                    .then((value) {
+                  if (value['Role'] == 'Admin') {
+                    signinUser(email, password, context);
+                  } else {
+                    Navigator.pop(context);
+                    addError(error: 'Invalid Email');
+                  }
+                }).catchError((e) {
+                  Navigator.pop(context);
+                  addError(error: 'Invalid Email');
+                });
               }
             },
           ),
@@ -177,11 +179,13 @@ class _SignFormState extends State<SignForm> {
             MaterialPageRoute(builder: (context) => HomeScreen()),
             (Route<dynamic> route) => false);
       } else {
+        Navigator.pop(context);
         String title = "Email not verified";
         String content = "Please verify the Email first to Sigin.";
         verifyEmailDialog(context, title, content);
       }
     }).catchError((e) {
+      Navigator.pop(context);
       Snack_Bar.show(context, e.message);
     });
   }
