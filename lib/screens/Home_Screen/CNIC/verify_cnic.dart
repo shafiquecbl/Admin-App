@@ -5,7 +5,6 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ManageCNIC extends StatefulWidget {
   final String email;
@@ -21,14 +20,12 @@ class _ManageCNICState extends State<ManageCNIC> {
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
-        shadowColor: kPrimaryColor,
         centerTitle: false,
         title: Padding(
           padding: const EdgeInsets.only(left: 0),
           child: Text(
             'Managa CNIC',
             style: GoogleFonts.teko(
-              color: kPrimaryColor,
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
@@ -55,7 +52,7 @@ class _ManageCNICState extends State<ManageCNIC> {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-            return SpinKitCircle(color: kPrimaryColor);
+            return Center(child: CircularProgressIndicator());
           List galleryItems = [
             snapshot.data['CNIC BS'],
             snapshot.data['CNIC FS'],
@@ -70,10 +67,8 @@ class _ManageCNICState extends State<ManageCNIC> {
               );
             },
             itemCount: galleryItems.length,
-            loadingBuilder: (context, event) => Center(
-                child: SpinKitCircle(
-              color: kPrimaryColor,
-            )),
+            loadingBuilder: (context, event) =>
+                Center(child: Center(child: CircularProgressIndicator())),
           ));
         },
       ),

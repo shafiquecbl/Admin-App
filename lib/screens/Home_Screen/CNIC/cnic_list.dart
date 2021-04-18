@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/screens/Home_Screen/CNIC/verify_cnic.dart';
@@ -25,17 +26,14 @@ class _CNICListState extends State<CNICList> {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null)
-            return SpinKitCircle(
-              color: kPrimaryColor,
-            );
+            return Center(child: CircularProgressIndicator());
           if (snapshot.data.docs.length == 0)
             return Center(
               child: Text(
                 "No User available",
                 style: GoogleFonts.teko(
-                  color: kPrimaryColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 18,
                 ),
               ),
             );
@@ -51,43 +49,79 @@ class _CNICListState extends State<CNICList> {
   }
 
   listTile(DocumentSnapshot snapshot) {
-    return Card(
-      child: ListTile(
-        leading: CircleAvatar(
-            radius: 27,
-            backgroundColor: kPrimaryColor.withOpacity(0.8),
-            child: snapshot['PhotoURL'] == null || snapshot['PhotoURL'] == ""
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: Image.asset(
-                      'assets/images/nullUser.png',
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: FadeInImage.assetNetwork(
-                      placeholder: 'assets/images/load.gif',
-                      image: snapshot['PhotoURL'],
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  )),
-        title: Text(snapshot['Name']),
-        subtitle: Text(snapshot['Email']),
-        trailing: RaisedButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => ManageCNIC(
-                          email: snapshot['Email'],
-                        )));
-          },
-          child: Text("View"),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => ManageCNIC(
+                      email: snapshot['Email'],
+                    )));
+      },
+      child: Card(
+        elevation: 2,
+        shadowColor: Colors.deepPurple,
+        child: ListTile(
+          leading: Container(
+              padding: EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(40)),
+                border: Border.all(
+                  width: 2,
+                  color: Theme.of(context).primaryColor,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              child: CircleAvatar(
+                  radius: 24,
+                  backgroundColor: hexColor,
+                  child: snapshot['PhotoURL'] == null ||
+                          snapshot['PhotoURL'] == ""
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.asset(
+                            'assets/images/nullUser.png',
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: CachedNetworkImage(
+                            imageUrl: snapshot['PhotoURL'],
+                            placeholder: (context, url) => Image(
+                              image: AssetImage('assets/images/nullUser.png'),
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        ))),
+          title: Text(snapshot['Name']),
+          subtitle: Text(snapshot['Email']),
+          trailing: IconButton(
+            icon: Icon(Icons.arrow_forward_ios),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => ManageCNIC(
+                            email: snapshot['Email'],
+                          )));
+            },
+          ),
         ),
       ),
     );

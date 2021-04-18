@@ -13,23 +13,21 @@ import 'package:shop_app/widgets/navigator.dart';
 class GridDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: StaggeredGridView.count(
-        crossAxisCount: 2,
-        crossAxisSpacing: 30,
-        mainAxisSpacing: 30,
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        staggeredTiles: [
-          StaggeredTile.extent(2, 120),
-          StaggeredTile.extent(1, 120),
-          StaggeredTile.extent(1, 120),
-        ],
-        children: [
-          users(context),
-          cnic(context),
-          inbox(context),
-        ],
-      ),
+    return StaggeredGridView.count(
+      crossAxisCount: 2,
+      crossAxisSpacing: 30,
+      mainAxisSpacing: 30,
+      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+      staggeredTiles: [
+        StaggeredTile.extent(1, 130),
+        StaggeredTile.extent(1, 130),
+        StaggeredTile.extent(1, 130),
+      ],
+      children: [
+        users(context),
+        cnic(context),
+        inbox(context),
+      ],
     );
   }
 
@@ -38,22 +36,22 @@ class GridDashboard extends StatelessWidget {
       onTap: () {
         navigator(context, ManageUsers());
       },
-      splashColor: kPrimaryColor,
+      splashColor: Color(0xFFFACE13),
       child: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
-            color: kPrimaryColor.withOpacity(0.3),
+            color: Colors.grey,
             spreadRadius: 0,
             blurRadius: 2,
             offset: Offset(1, 0),
           )
-        ], color: Colors.grey[50], borderRadius: BorderRadius.circular(10)),
+        ], color: Color(0xFFFACE13), borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SvgPicture.asset(
               "assets/icons/User.svg",
-              color: kPrimaryColor,
+              color: hexColor,
               width: 42,
             ),
             SizedBox(
@@ -61,8 +59,8 @@ class GridDashboard extends StatelessWidget {
             ),
             Text(
               "Users",
-              style:
-                  GoogleFonts.teko(fontWeight: FontWeight.w600, fontSize: 18),
+              style: GoogleFonts.teko(
+                  color: hexColor, fontWeight: FontWeight.w600, fontSize: 18),
             ),
           ],
         ),
@@ -75,22 +73,22 @@ class GridDashboard extends StatelessWidget {
       onTap: () {
         navigator(context, CNICList());
       },
-      splashColor: kPrimaryColor,
+      splashColor: Color(0xFF17D577),
       child: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
-            color: kPrimaryColor.withOpacity(0.3),
+            color: Colors.grey,
             spreadRadius: 0,
             blurRadius: 2,
             offset: Offset(1, 0),
           )
-        ], color: Colors.grey[50], borderRadius: BorderRadius.circular(10)),
+        ], color: Color(0xFF17D577), borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SvgPicture.asset(
               "assets/icons/id-card.svg",
-              color: kPrimaryColor,
+              color: hexColor,
               width: 42,
             ),
             SizedBox(
@@ -98,8 +96,8 @@ class GridDashboard extends StatelessWidget {
             ),
             Text(
               "Manage CNIC",
-              style:
-                  GoogleFonts.teko(fontWeight: FontWeight.w600, fontSize: 18),
+              style: GoogleFonts.teko(
+                  color: hexColor, fontWeight: FontWeight.w600, fontSize: 18),
             ),
           ],
         ),
@@ -112,22 +110,22 @@ class GridDashboard extends StatelessWidget {
       onTap: () {
         navigator(context, Inbox());
       },
-      splashColor: kPrimaryColor,
+      splashColor: Color(0xFF54C1F1),
       child: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
-            color: kPrimaryColor.withOpacity(0.3),
+            color: Colors.grey,
             spreadRadius: 0,
             blurRadius: 2,
             offset: Offset(1, 0),
           )
-        ], color: Colors.grey[50], borderRadius: BorderRadius.circular(10)),
+        ], color: Color(0xFF54C1F1), borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(
               Icons.inbox,
-              color: kPrimaryColor,
+              color: hexColor,
               size: 42,
             ),
             SizedBox(
@@ -139,14 +137,16 @@ class GridDashboard extends StatelessWidget {
                 Text(
                   "Inbox",
                   style: GoogleFonts.teko(
-                      fontWeight: FontWeight.w600, fontSize: 18),
+                      color: hexColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18),
                 ),
                 SizedBox(
                   width: 5,
                 ),
                 StreamBuilder(
                   stream: FirebaseFirestore.instance
-                      .collection('Admin')
+                      .collection('Users')
                       .doc(FirebaseAuth.instance.currentUser.email)
                       .collection('Contact US')
                       .where('Status', isEqualTo: 'unread')

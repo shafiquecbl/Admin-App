@@ -328,7 +328,7 @@ class _ChatScreenState extends State<ChatScreen> {
       case UserState.Offline:
         return Colors.red;
       case UserState.Online:
-        return kPrimaryColor;
+        return kGreenColor;
       default:
         return Colors.orange;
     }

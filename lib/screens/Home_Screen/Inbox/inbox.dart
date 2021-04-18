@@ -1,5 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/enum/user_state.dart';
@@ -39,7 +40,8 @@ class _InboxState extends State<Inbox> {
             .orderBy("Time", descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.data == null) return SpinKitCircle(color: kPrimaryColor);
+          if (snapshot.data == null)
+            return Center(child: CircularProgressIndicator());
           if (snapshot.data.docs.length == 0)
             return Center(
               child: Padding(
@@ -118,9 +120,16 @@ class _InboxState extends State<Inbox> {
                   child: snapshot['PhotoURL'] != null
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(70),
-                          child: FadeInImage.assetNetwork(
-                            placeholder: 'assets/images/load.gif',
-                            image: snapshot['PhotoURL'],
+                          child: CachedNetworkImage(
+                            imageUrl: snapshot['PhotoURL'],
+                            placeholder: (context, url) => Image(
+                              image: AssetImage('assets/images/nullUser.png'),
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                             width: 60,
                             height: 60,
                             fit: BoxFit.cover,
@@ -233,7 +242,7 @@ class _InboxState extends State<Inbox> {
       case UserState.Offline:
         return Colors.red;
       case UserState.Online:
-        return kPrimaryColor;
+        return kGreenColor;
       default:
         return Colors.orange;
     }

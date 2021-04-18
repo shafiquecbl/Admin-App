@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/updateData.dart';
 import 'package:shop_app/screens/Home_Screen/griddashboard.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
@@ -84,57 +85,60 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     getToken();
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 80,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        backgroundColor: Color(0xFF0C1019),
+        body: Stack(
+          children: [
+            Container(
+              width: size.width,
+              height: size.height * .3,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/images/top_header.png'),
+                    fit: BoxFit.cover),
+              ),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
                   children: <Widget>[
-                    Text(
-                      "Muhammad Shafique",
-                      style: GoogleFonts.teko(
-                          fontWeight: FontWeight.bold, fontSize: 22),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      "Admin",
-                      style: GoogleFonts.teko(
-                          color: Color(0xffa29aac),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                    ),
+                    ListTile(
+                        contentPadding:
+                            EdgeInsets.only(left: 20, right: 20, top: 20),
+                        title: Text(
+                          "Muhammad Shafique",
+                          style: GoogleFonts.teko(
+                              color: hexColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22),
+                        ),
+                        subtitle: Text(
+                          "Admin",
+                          style: GoogleFonts.teko(
+                              color: Color(0xFF0C1019),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        trailing: IconButton(
+                          alignment: Alignment.topCenter,
+                          icon: Icon(
+                            Icons.logout,
+                            color: hexColor,
+                          ),
+                          onPressed: () {
+                            confirmSignout(context);
+                          },
+                        )),
+                    Expanded(child: GridDashboard()),
                   ],
                 ),
-                IconButton(
-                  alignment: Alignment.topCenter,
-                  icon: Icon(
-                    Icons.logout,
-                  ),
-                  onPressed: () {
-                    confirmSignout(context);
-                  },
-                )
-              ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 40,
-          ),
-          GridDashboard()
-        ],
-      ),
-    );
+          ],
+        ));
   }
 }
 

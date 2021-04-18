@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/setData.dart';
 
@@ -48,9 +48,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SpinKitDoubleBounce(
-              color: kPrimaryColor,
-            ),
+            Center(child: CircularProgressIndicator()),
             SizedBox(height: 20),
             Text(
               "Verification link has been sent to: ",

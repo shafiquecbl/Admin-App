@@ -1,6 +1,7 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/size_config.dart';
@@ -26,9 +27,7 @@ class _UserProfileState extends State<UserProfile> {
         future: getData.getUserProfile(widget.userEamil),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-            return SpinKitCircle(
-              color: kPrimaryColor,
-            );
+            return Center(child: CircularProgressIndicator());
 
           return SafeArea(
             child: RefreshIndicator(
@@ -44,29 +43,59 @@ class _UserProfileState extends State<UserProfile> {
                     Center(
                       child: Stack(
                         children: [
-                          CircleAvatar(
-                              radius: 68,
-                              backgroundColor: hexColor,
-                              child: snapshot.data['PhotoURL'] == null ||
-                                      snapshot.data['PhotoURL'] == ""
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(70),
-                                      child: Image.asset(
-                                        'assets/images/nullUser.png',
-                                        width: 130,
-                                        height: 130,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(70),
-                                      child: Image.network(
-                                        snapshot.data['PhotoURL'],
-                                        width: 130,
-                                        height: 130,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )),
+                          Container(
+                              padding: EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(70)),
+                                border: Border.all(
+                                  width: 2,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                  ),
+                                ],
+                              ),
+                              child: CircleAvatar(
+                                  radius: 65,
+                                  backgroundColor: hexColor,
+                                  child: snapshot.data['PhotoURL'] == null ||
+                                          snapshot.data['PhotoURL'] == ""
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(70),
+                                          child: Image.asset(
+                                            'assets/images/nullUser.png',
+                                            width: 130,
+                                            height: 130,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(70),
+                                          child: CachedNetworkImage(
+                                            imageUrl: snapshot.data['PhotoURL'],
+                                            placeholder: (context, url) =>
+                                                Image(
+                                              image: AssetImage(
+                                                  'assets/images/nullUser.png'),
+                                              width: 130,
+                                              height: 130,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
+                                            width: 130,
+                                            height: 130,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ))),
                         ],
                       ),
                     ),
