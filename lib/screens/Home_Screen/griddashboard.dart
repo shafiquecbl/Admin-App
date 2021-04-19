@@ -36,22 +36,22 @@ class GridDashboard extends StatelessWidget {
       onTap: () {
         navigator(context, ManageUsers());
       },
-      splashColor: Color(0xFF8D4DE9),
+      splashColor: kIconColor,
       child: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: kIconColor,
             spreadRadius: 0,
             blurRadius: 2,
             offset: Offset(1, 0),
           )
-        ], color: Colors.greenAccent, borderRadius: BorderRadius.circular(10)),
+        ], color: kCardColor, borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SvgPicture.asset(
               "assets/icons/User.svg",
-              color: hexColor,
+              color: kIconColor,
               width: 42,
             ),
             SizedBox(
@@ -60,7 +60,7 @@ class GridDashboard extends StatelessWidget {
             Text(
               "Users",
               style: GoogleFonts.teko(
-                  color: hexColor, fontWeight: FontWeight.w600, fontSize: 18),
+                  color: kTextColor, fontWeight: FontWeight.w600, fontSize: 18),
             ),
           ],
         ),
@@ -73,22 +73,22 @@ class GridDashboard extends StatelessWidget {
       onTap: () {
         navigator(context, CNICList());
       },
-      splashColor: Color(0xFF17D577),
+      splashColor: kIconColor,
       child: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: kIconColor,
             spreadRadius: 0,
             blurRadius: 2,
             offset: Offset(1, 0),
           )
-        ], color: Color(0xFF8D4DE9), borderRadius: BorderRadius.circular(10)),
+        ], color: kCardColor, borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SvgPicture.asset(
               "assets/icons/id-card.svg",
-              color: hexColor,
+              color: kIconColor,
               width: 42,
             ),
             SizedBox(
@@ -97,7 +97,7 @@ class GridDashboard extends StatelessWidget {
             Text(
               "Manage CNIC",
               style: GoogleFonts.teko(
-                  color: hexColor, fontWeight: FontWeight.w600, fontSize: 18),
+                  color: kTextColor, fontWeight: FontWeight.w600, fontSize: 18),
             ),
           ],
         ),
@@ -110,22 +110,22 @@ class GridDashboard extends StatelessWidget {
       onTap: () {
         navigator(context, Inbox());
       },
-      splashColor: Color(0xFF54C1F1),
+      splashColor: kIconColor,
       child: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: kIconColor,
             spreadRadius: 0,
             blurRadius: 2,
             offset: Offset(1, 0),
           )
-        ], color: Color(0xFF54C1F1), borderRadius: BorderRadius.circular(10)),
+        ], color: kCardColor, borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(
               Icons.inbox,
-              color: hexColor,
+              color: kIconColor,
               size: 42,
             ),
             SizedBox(
@@ -137,7 +137,7 @@ class GridDashboard extends StatelessWidget {
                 Text(
                   "Inbox",
                   style: GoogleFonts.teko(
-                      color: hexColor,
+                      color: kTextColor,
                       fontWeight: FontWeight.w600,
                       fontSize: 18),
                 ),
@@ -154,25 +154,27 @@ class GridDashboard extends StatelessWidget {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting)
                       return Container();
-                    return Container(
-                      padding: EdgeInsets.all(2),
-                      decoration: new BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      constraints: BoxConstraints(
-                        minWidth: 25,
-                        minHeight: 12,
-                      ),
-                      child: new Text(
-                        '${snapshot.data.docs.length}',
-                        style: new TextStyle(
-                          color: Colors.white,
-                          fontSize: 8,
+                    if (snapshot.data.docs.length != 0)
+                      return Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: new BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(50),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    );
+                        constraints: BoxConstraints(
+                          minWidth: 25,
+                          minHeight: 12,
+                        ),
+                        child: new Text(
+                          '${snapshot.data.docs.length}',
+                          style: new TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    return Container();
                   },
                 ),
               ],

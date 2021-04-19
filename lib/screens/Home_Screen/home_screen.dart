@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     var size = MediaQuery.of(context).size;
     getToken();
     return Scaffold(
-        backgroundColor: Color(0xFF0C1019),
+        backgroundColor: userCircleBackground,
         body: Stack(
           children: [
             Container(
@@ -96,8 +96,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               height: size.height * .3,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/images/top_header.png'),
-                    fit: BoxFit.cover),
+                    image: AssetImage('assets/curve2.png'), fit: BoxFit.cover),
               ),
             ),
             SafeArea(
