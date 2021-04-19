@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -62,9 +63,17 @@ class _ChatScreenState extends State<ChatScreen> {
                                 height: 45,
                                 fit: BoxFit.cover,
                               )
-                            : FadeInImage.assetNetwork(
-                                placeholder: 'assets/images/load.gif',
-                                image: widget.receiverPhotoURL,
+                            : CachedNetworkImage(
+                                imageUrl: widget.receiverPhotoURL,
+                                placeholder: (context, url) => Image(
+                                  image:
+                                      AssetImage('assets/images/nullUser.png'),
+                                  width: 45,
+                                  height: 45,
+                                  fit: BoxFit.cover,
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
                                 width: 45,
                                 height: 45,
                                 fit: BoxFit.cover,
