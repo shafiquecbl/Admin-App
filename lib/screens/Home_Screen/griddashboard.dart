@@ -154,27 +154,26 @@ class GridDashboard extends StatelessWidget {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting)
                       return Container();
-                    if (snapshot.data.docs.length != 0)
-                      return Container(
-                        padding: EdgeInsets.all(2),
-                        decoration: new BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(50),
+                    if (snapshot.data.docs.length == 0) return Container();
+                    return Container(
+                      padding: EdgeInsets.all(2),
+                      decoration: new BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      constraints: BoxConstraints(
+                        minWidth: 25,
+                        minHeight: 12,
+                      ),
+                      child: new Text(
+                        '${snapshot.data.docs.length}',
+                        style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
                         ),
-                        constraints: BoxConstraints(
-                          minWidth: 25,
-                          minHeight: 12,
-                        ),
-                        child: new Text(
-                          '${snapshot.data.docs.length}',
-                          style: new TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      );
-                    return Container();
+                        textAlign: TextAlign.center,
+                      ),
+                    );
                   },
                 ),
               ],
