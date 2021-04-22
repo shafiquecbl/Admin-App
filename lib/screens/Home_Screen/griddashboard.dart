@@ -154,7 +154,6 @@ class GridDashboard extends StatelessWidget {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting)
                       return Container();
-                    if (snapshot.data.docs.length == 0) return Container();
                     return Container(
                       padding: EdgeInsets.all(2),
                       decoration: new BoxDecoration(
